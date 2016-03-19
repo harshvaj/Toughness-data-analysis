@@ -1,0 +1,17 @@
+import numpy as np
+import matplotlib.pyplot as plt
+%matplotlib inline
+# reading the feature data file and making feature matrix 
+# 16 Dimension feature space
+firsthalf = open('/home/harshvaj/first half.txt')
+j = firsthalf.readlines()
+features = []
+
+for i in range(0,len(j)):
+    temp = j[i]
+    temp = temp.split()
+    ftemp = [float(x) for x in temp]
+    temparray = np.array(ftemp)
+    features.append(temparray)
+firsthalf.close()
+feats = np.array(features)
