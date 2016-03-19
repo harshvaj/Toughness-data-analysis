@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 %matplotlib inline
+
 # reading the feature data file and making feature matrix 
 # 16 Dimension feature space
 firsthalf = open('/home/harshvaj/first half.txt')
@@ -15,6 +16,7 @@ for i in range(0,len(j)):
     features.append(temparray)
 firsthalf.close()
 feats = np.array(features)
+
 # reading the target data file and making target vector 
 # Target is the charpy test value of the sample
 secondhalf = open('/home/harshvaj/secondhalf.txt')
@@ -32,6 +34,7 @@ for i in range(1,16):
 #Splitting the training and validation set
 from sklearn.cross_validation import train_test_split
 Xtrain, Xtest, ytrain, ytest = train_test_split(feats, target, test_size = 80, random_state = 42)
+
 # Performing Non Linear Regression by rbf kernalized Support Vector Regressor
 # Tuning the model parameter of rbf SVR using the training set to find best accuracy possible
 
@@ -71,6 +74,7 @@ with sns.axes_style("ticks"):
     plt.title('Tuning C, penalty factor for rbf kernal SVR')
     axes = plt.gca()
     ymin, ymax = axes.get_ylim() 
+    
 # Initialising rbf kernalized SVR based on best C parameter and fitting training set 
 regrbf = SVR(kernel='rbf', C=10000.0, verbose=False)
 regrbf.fit(Xtrain,ytrain)
@@ -84,6 +88,7 @@ with sns.axes_style('ticks'):
     plt.xlabel('Actual Value of Target')
     plt.ylabel('Predicted Value of Target')
     plt.title('Training Set Accuracy')
+    
 #Plotting the predicted v/s actual values of target
 with sns.axes_style('ticks'):
     plt.scatter(ytest, predrbf_test)
@@ -91,6 +96,7 @@ with sns.axes_style('ticks'):
     plt.xlabel('Actual Value of Target')
     plt.ylabel('Predicted Value of Target')
     plt.title('Testing Set Accuracy') 
+    
 # Performing Non Linear Regression by polynomial kernalized Support Vector Regressor
 # Tuning the model parameter of ploy SVR using the training set to find best accuracy possible
 
@@ -128,12 +134,15 @@ with sns.axes_style("ticks"):
     plt.title('Tuning C, penalty factor for polinomial kernal SVR')
     axes = plt.gca()
     ymin, ymax = axes.get_ylim() 
+    
 # Initialising rbf kernalized SVR based on best C parameter and fitting training set 
 regpoly = SVR(kernel='poly', degree=3, C=10000, verbose=False)
 regpoly.fit(Xtrain,ytrain)
+
 #predicting on test and train sets
 predpoly =regpoly.predict(Xtrain)
 predpoly_test = regpoly.predict(Xtest)
+
 #Plotting the predicted v/s actual values of target
 with sns.axes_style('ticks'):
     plt.scatter(ytrain, predpoly)
@@ -141,6 +150,7 @@ with sns.axes_style('ticks'):
     plt.xlabel('Actual Value of Target')
     plt.ylabel('Predicted Value of Target')
     plt.title('Training Set Accuracy')
+    
 #Plotting the predicted v/s actual values of target
 with sns.axes_style('ticks'):
     plt.scatter(ytest, predpoly_test)
@@ -148,6 +158,7 @@ with sns.axes_style('ticks'):
     plt.xlabel('Actual Value of Target')
     plt.ylabel('Predicted Value of Target')
     plt.title('Testing Set Accuracy')
+    
 # Performing Non Linear Regression by  Neural Network having Sigmoid activation function in hidden layer 
 # Tuning the model parameter of Hidden layer using the training set to find best accuracy possible
 from sklearn.metrics import r2_score
@@ -192,6 +203,7 @@ with sns.axes_style("ticks"):
     plt.title('Plot showing variation of score with number of neurons in hidden layer')
     axes = plt.gca()
     ymin, ymax = axes.get_ylim() 
+    
 # Initialising Neural network with the number of units in hidden layer which give best score , and training it on train set 
 Hidden = Layer('Sigmoid', name='hidden', units=100, weight_decay=.1, dropout=None, frozen=False)
 Output = Layer("Linear", name='output', units=1, weight_decay=.1, dropout=None, frozen=False)
@@ -207,6 +219,7 @@ with sns.axes_style('ticks'):
     plt.xlabel('Actual Value of Target')
     plt.ylabel('Predicted Value of Target')
     plt.title('Training Set Accuracy')
+    
 #Plotting the predicted v/s actual values of target
 with sns.axes_style('ticks'):
     plt.scatter(ytest, prednns_test)
@@ -214,10 +227,10 @@ with sns.axes_style('ticks'):
     plt.xlabel('Actual Value of Target')
     plt.ylabel('Predicted Value of Target')
     plt.title('Testing Set Accuracy')  
+    
 #Comparing the score of the three algo on testing data
 rbfscore = regrbf.score(Xtest, ytest)
 polyscore = regpoly.score(Xtest, ytest)
 nnscore = r2_score(ytest, prednns_test)
 print(' The R2 score of rbf kernal SVR is %f \n'% rbfscore) 
 print(' The score of poly kernal SVR is %f \n The score of neural network regression is %f'%(polyscore, nnscore))
-
